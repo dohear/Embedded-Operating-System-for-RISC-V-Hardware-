@@ -1,0 +1,30 @@
+#
+# Platform-specific Makefile definitions for the RISC-V port of Embedded
+# Xinu.
+#
+
+TEMPLATE_ARCH := riscv
+
+# Architecture root and prefix (ignored if user overrides COMPILER_ROOT from the
+# toplevel Makefile).
+ARCH_ROOT   :=
+ARCH_PREFIX := riscv64-linux-gnu-
+
+# Flag for producing GDB debug informations.
+BUGFLAG     := -gstabs+
+
+# Add a way to test for any RISC-V platform in C code.
+DEFS        += -D_XINU_ARCH_RISCV_
+
+PLATFORM_NAME := RISC-V 64-bit
+
+# GCC options at https://gcc.gnu.org/onlinedocs/gcc/RISC-V-Options.html
+# Extra compiler and assembler flags to specifically target the RISC-V architecture
+CFLAGS   += -march=rv64g -fno-stack-protector -mcmodel=medany
+ASFLAGS  += -march=rv64g
+
+# Extra compiler flag that disables gcc from generating unaligned memory accesses
+CFLAGS	 += -mstrict-align
+
+# Objcopy flags, used for including data files in the resulting binary.
+OCFLAGS       := -I binary -O elf64-littleriscv -B riscv

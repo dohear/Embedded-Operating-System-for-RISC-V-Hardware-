@@ -1,0 +1,28 @@
+#
+# Platform-specific Makefile definitions for the RISCV Nezha port of Embedded Xinu.
+#
+
+# Include default RISCV definitions
+include arch/riscv/platformVars
+
+PLATFORM_NAME := Sipeed Nezha
+
+# Add a define so we can test for RISCV Nezha in C code if absolutely needed
+DEFS     += -D_XINU_PLATFORM_RISCV_NEZHA_
+
+# Embedded Xinu components to build into the kernel image
+#APPCOMPS := apps mailbox shell test
+
+# Embedded Xinu device drivers to build into the kernel image
+#DEVICES  := loopback tty uart-pl011
+
+# On this platform, generating the final boot image requires an external tool.
+UBOOTOPTS := -A riscv -O u-boot -T kernel -a 0x42000000 \
+			 -C none -e 0x42000000 -n Xinu
+
+# Default build target
+$(BOOTIMAGE): xinu.bin
+	mkimage $(UBOOTOPTS) -d xinu.bin xinu.boot $@
+
+xinu.bin: xinu.elf
+	$(OBJCOPY) -O binary $^ $@

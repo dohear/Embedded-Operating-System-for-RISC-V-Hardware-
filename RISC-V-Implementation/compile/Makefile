@@ -92,7 +92,7 @@ LDFLAGS := --static --gc-sections
 # Set default external libraries.  Embedded Xinu is, of course, stand-alone and
 # ordinarily does not need to be linked to any external libraries; however,
 # platformVars can add -lgcc to this if needed by the platform.
-LDLIBS  := 
+LDLIBS  :=
 
 # Set default include directories.  platformVars can add additional directories
 # to this if really needed.
@@ -142,6 +142,9 @@ ifneq ($(filter shell, $(APPCOMPS)),)
 else
   CFLAGS += -DHAVE_SHELL=0
 endif
+
+# Set C standard to gnu11. this includes the asm keyword and
+CFLAGS += -Wall -g -std=gnu11
 
 # Set linker script.  A script in platforms/ overrides the one in arch/, if
 # present.
@@ -241,10 +244,10 @@ MAIN_OBJ := $(MAIN_SRC:%.c=%.o)
 MAIN_DEP := $(MAIN_SRC:%.c=%.d)
 
 # Data is relative to the compile directory
-DATA     := 
+DATA     :=
 
 DATA_SRC :=
-DATA_OBJ := 
+DATA_OBJ :=
 include $(DATA:%=$(TOPDIR)/%/Makerules)
 
 # Flags to get GCC to generate dependency information (in .d files) as a side
